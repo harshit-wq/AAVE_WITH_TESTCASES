@@ -13,7 +13,22 @@ interface aave_functions{
 
   function repay(address asset, uint256 amount, uint256 rateMode, address onBehalfOf) external returns (uint256);
 
+  function setUserUseReserveAsCollateral(address asset, bool useAsCollateral) external;
+
+  function getUserAccountData(address user)
+    external
+    view
+    returns (
+      uint256 totalCollateralETH,
+      uint256 totalDebtETH,
+      uint256 availableBorrowsETH,
+      uint256 currentLiquidationThreshold,
+      uint256 ltv,
+      uint256 healthFactor
+    );
+
 }
+
 
 interface aave_weth{
   function depositETH(address lendingPool, address onBehalfOf, uint16 referralCode) external payable;
