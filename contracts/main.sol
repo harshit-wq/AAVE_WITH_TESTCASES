@@ -31,13 +31,6 @@ contract interact{
         console.log(d,e,f);
     }
 
-    function transferfrom(address asset,uint amount) external {
-        IERC20_functions token = IERC20_functions(asset);
-        console.log("holo",token.balanceOf(address(this)));
-        token.transferFrom(msg.sender, address(this), amount);
-        console.log("holo",token.balanceOf(address(this)));
-    }
-
     function isupply(address _asset, uint256 _amount, uint16 _referralCode) external {
 
         IERC20_functions token = IERC20_functions(_asset);  
