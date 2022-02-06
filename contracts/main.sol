@@ -31,9 +31,17 @@ contract interact{
         console.log(d,e,f);
     }
 
+    function transferfrom(address asset,uint amount) external {
+        IERC20_functions token = IERC20_functions(asset);
+        console.log("holo",token.balanceOf(address(this)));
+        token.transferFrom(msg.sender, address(this), amount);
+        console.log("holo",token.balanceOf(address(this)));
+    }
+
     function isupply(address _asset, uint256 _amount, uint16 _referralCode) external {
 
         IERC20_functions token = IERC20_functions(_asset);  
+        console.log("checking this onw:",token.balanceOf(msg.sender));
         require(token.transferFrom(msg.sender, address(this), _amount), "You do not have enough balance");
         aave_functions instance = aave_functions(interact_with);
         require(token.approve(interact_with,_amount), "Not approved");
@@ -48,21 +56,16 @@ contract interact{
     }
 
     function iborrow(address asset, address recieve, uint256 amount,uint256 interestRateMode, uint16 referralCode) external {
-        IERC20_functions token = IERC20_functions(asset);
+        IERC20_functions token = IERC20_functions(recieve);
         aave_functions instance = aave_functions(interact_with);
-
         instance.setUserUseReserveAsCollateral(asset, true);// added
-        
-
         instance.borrow(recieve, amount, interestRateMode, referralCode, address(this));
         require(token.transfer(msg.sender,amount));
     }
 
     function irepay(address asset, uint256 amount, uint256 rateMode) external {
         IERC20_functions token = IERC20_functions(asset);
-
         require(token.transferFrom(msg.sender, address(this), amount));
-
         aave_functions instance = aave_functions(interact_with);
         require(token.approve(interact_with,amount));
         instance.repay(asset, amount, rateMode, address(this));
